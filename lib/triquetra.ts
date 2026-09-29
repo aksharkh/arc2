@@ -40,26 +40,35 @@ function sampleArc(a: Vec2, via: Vec2, b: Vec2, steps: number): Vec2[] {
   return pts;
 }
 
+type Vec3 = [number, number, number];
+
 /**
- * Returns the closed triquetra loop as [x, y, z] points (y up).
+ * The three arcs of the mark as separate open polylines of [x, y, z] (y up).
+ * Arc k runs from tip k to tip k+1 and bows toward tip k+2.
  * `bow` sets how far past the centre each arc bends (0.2–0.45 reads best).
  * z weaves over/under so the crossings alternate like a true knot.
+ * `outward` is the unit direction each arc moves in when the mark separates.
  */
-export function triquetraPoints(stepsPerArc = 120, bow = 0.34, weave = 0.22) {
+export function triquetraArcs(steps = 120, bow = 0.34, weave = 0.22) {
   const tips = TIP_ANGLES.map((t) => [Math.cos(t), Math.sin(t)] as Vec2);
-  const out: [number, number, number][] = [];
-  const total = stepsPerArc * 3;
-  for (let k = 0; k < 3; k++) {
+  return [0, 1, 2].map((k) => {
     const a = tips[k];
     const b = tips[(k + 1) % 3];
     const c = tips[(k + 2) % 3];
     const via: Vec2 = [c[0] * bow, c[1] * bow];
-    sampleArc(a, via, b, stepsPerArc).forEach((p, i) => {
-      const s = (k * stepsPerArc + i) / total;
-      out.push([p[0], p[1], weave * Math.sin(6 * Math.PI * s)]);
-    });
-  }
-  return out;
+    const pts: Vec3[] = [...sampleArc(a, via, b, steps), b].map((p, i) => [
+      p[0],
+      p[1],
+      weave * Math.sin((2 * Math.PI * i) / steps),
+    ]);
+    const outward: Vec2 = [-c[0], -c[1]];
+    return { pts, outward };
+  });
+}
+
+/** The closed loop (all three arcs joined), used for the flat SVG mark. */
+export function triquetraPoints(stepsPerArc = 120, bow = 0.34, weave = 0.22) {
+  return triquetraArcs(stepsPerArc, bow, weave).flatMap((a) => a.pts.slice(0, -1));
 }
 
 /** SVG path for the mark in a viewBox of -1.2 -1.2 2.4 2.4 (y flipped for screen). */

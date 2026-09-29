@@ -1,39 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { Inter_Tight } from "next/font/google";
 import "./globals.css";
 
-const display = Montserrat({
-  variable: "--font-display",
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700"],
-});
-
-const serif = Instrument_Serif({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-});
-
-const mono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["300", "400"],
+  weight: ["200", "300", "400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "TripleArc — Governance, Risk & Compliance, Engineered",
+  title: "TripleArc — Governance, Risk & Compliance",
   description:
     "TripleArc GRC Solutions. Independent governance, risk and compliance advisory for regulated organisations that cannot afford uncertainty.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#03081a",
+  themeColor: "#ebe8e2",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${serif.variable} ${mono.variable}`}>
+    <html lang="en" className={interTight.variable}>
       <body>{children}</body>
     </html>
   );
