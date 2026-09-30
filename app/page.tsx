@@ -1,21 +1,21 @@
-import { Header, Intro, SmoothScroll } from "@/components/core";
-import Hero from "@/components/Hero";
-import { Contact, Footer, MaterialBand, Method, Numbers, Sectors, Services, Statement } from "@/components/Sections";
+import { SmoothScroll } from "@/components/kit";
+import { Hero, Nav } from "@/components/Top";
+import { Contact, Faq, Footer, Frameworks, Method, Pillars, Sectors, Services, Stats } from "@/components/Blocks";
 
 export default function Home() {
   return (
     <>
       <SmoothScroll />
-      <Intro />
-      <Header />
+      <Nav />
       <main>
         <Hero />
-        <Statement />
+        <Frameworks />
+        <Pillars />
         <Services />
-        <MaterialBand />
-        <Numbers />
         <Method />
+        <Stats />
         <Sectors />
+        <Faq />
         <Contact />
       </main>
       <Footer />

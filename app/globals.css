@@ -1,17 +1,19 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-bone: #ebe8e2;
-  --color-paper: #f4f2ee;
-  --color-ink: #0c0e12;
-  --color-ink-2: #15181e;
-  --color-stone: #8b877f;
-  --color-line: rgba(12, 14, 18, 0.12);
-  --color-gold: #b8955a;
-  --color-lapis: #14286b;
-  --font-sans: var(--font-inter-tight);
+  --color-mist: #f1f3f9;
+  --color-ink: #0a1230;
+  --color-slate: #5a6383;
+  --color-line: #e2e6f0;
+  --color-cobalt: #1d4dff;
+  --color-cobalt-deep: #0c2fc4;
+  --color-sky: #e2eaff;
+  --color-navy: #070e2b;
+  --color-mint: #2fd39a;
+  --font-sans: var(--font-manrope);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --shadow-card: 0 1px 2px rgba(10, 18, 48, 0.04), 0 12px 32px -12px rgba(10, 18, 48, 0.12);
+  --shadow-float: 0 2px 4px rgba(4, 12, 50, 0.08), 0 30px 60px -20px rgba(4, 12, 50, 0.45);
 }
 
 :root {
@@ -19,16 +21,15 @@
 }
 
 html {
-  background: #ebe8e2;
-  color: #0c0e12;
+  background: #f1f3f9;
+  color: #0a1230;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: #ebe8e2;
-  font-family: var(--font-inter-tight), system-ui, sans-serif;
-  font-feature-settings: "ss01", "cv11";
+  background: #f1f3f9;
+  font-family: var(--font-manrope), system-ui, sans-serif;
   overflow-x: clip;
 }
 
@@ -39,56 +40,103 @@ html.lenis body {
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
 
 ::selection {
-  background: #0c0e12;
-  color: #ebe8e2;
-}
-
-.label {
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  background: #1d4dff;
+  color: #fff;
 }
 
 .tabular {
   font-variant-numeric: tabular-nums;
 }
 
-/* Rings that ripple outward from a point. */
-.ripple {
+/* Card with a soft light that follows the pointer (set --x / --y from JS). */
+.spot {
+  position: relative;
+  isolation: isolate;
+}
+.spot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--x, 50%) var(--y, 50%), var(--spot, rgba(29, 77, 255, 0.1)), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+  z-index: -1;
+}
+.spot:hover::after {
+  opacity: 1;
+}
+
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--dur, 40s) linear infinite;
+}
+.marquee-wrap:hover .marquee {
+  animation-play-state: paused;
+}
+.marquee.rev {
+  animation-direction: reverse;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.spin-slow {
+  animation: spin 60s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+.spin-rev {
+  animation: spin 90s linear infinite reverse;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cell {
+  animation: cell 4.5s ease-in-out infinite;
+}
+@keyframes cell {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.6);
+  }
+}
+
+.ring-out {
   position: absolute;
   inset: 0;
   margin: auto;
   border-radius: 9999px;
   border: 1px solid currentColor;
-  animation: ripple 9s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+  animation: ring-out 8s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
   opacity: 0;
 }
-@keyframes ripple {
+@keyframes ring-out {
   0% {
-    transform: scale(0.18);
+    transform: scale(0.15);
     opacity: 0;
   }
-  12% {
-    opacity: 0.55;
+  15% {
+    opacity: 0.6;
   }
   100% {
     transform: scale(1);
     opacity: 0;
   }
-}
-
-.u-link {
-  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
-  transition: background-size 0.7s var(--ease-out-expo);
-}
-.u-link:hover {
-  background-size: 0 1px;
-  background-position: 100% 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {

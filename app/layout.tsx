@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Inter_Tight } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 
-const interTight = Inter_Tight({
-  variable: "--font-inter-tight",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -15,12 +15,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ebe8e2",
+  themeColor: "#f1f3f9",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={interTight.variable}>
+    <html lang="en" className={manrope.variable}>
       <body>{children}</body>
     </html>
   );
