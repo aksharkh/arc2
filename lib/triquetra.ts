@@ -78,3 +78,30 @@ export function triquetraPath(bow = 0.34) {
     pts.map((p, i) => `${i ? "L" : "M"}${p[0].toFixed(4)} ${(-p[1]).toFixed(4)}`).join(" ") + " Z"
   );
 }
+
+/* ---------- flat drawing helpers (SVG coordinates, y down) ---------- */
+
+/** The three outer tips of the mark. */
+export function triquetraTips(): Vec2[] {
+  return TIP_ANGLES.map((t) => [Math.cos(t), -Math.sin(t)] as Vec2);
+}
+
+/** The full circle each arc is cut from — the compass construction behind the mark. */
+export function triquetraCircles(bow = 0.34) {
+  const tips = TIP_ANGLES.map((t) => [Math.cos(t), Math.sin(t)] as Vec2);
+  return [0, 1, 2].map((k) => {
+    const c = tips[(k + 2) % 3];
+    const { x, y, r } = circleThrough(tips[k], [c[0] * bow, c[1] * bow], tips[(k + 1) % 3]);
+    return { cx: x, cy: -y, r };
+  });
+}
+
+/** Each arc as its own open SVG path, with the direction it moves in an exploded view. */
+export function triquetraArcPaths(bow = 0.34) {
+  return triquetraArcs(60, bow, 0).map(({ pts, outward }) => ({
+    d: pts.map((p, i) => `${i ? "L" : "M"}${p[0].toFixed(4)} ${(-p[1]).toFixed(4)}`).join(" "),
+    out: [outward[0], -outward[1]] as Vec2,
+    // a point a fifth of the way along, used to anchor callout leaders
+    pin: [pts[12][0], -pts[12][1]] as Vec2,
+  }));
+}
